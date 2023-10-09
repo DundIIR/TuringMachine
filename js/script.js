@@ -5,6 +5,7 @@ const btn = document.querySelector('button'),
 let table;
 
 let text, preIndex, index;
+let newChild = document.createElement('td');
 
 btn.addEventListener('click', main); 
 
@@ -54,6 +55,9 @@ function main() {
 			setTimeout(q20, 700);
 			break;
 		case 'q30':
+			table[table.length - 2].remove();
+			table = tr.querySelectorAll('td');
+			setTimeout(q30, 700);
 			break;
 		default:
 			break;
@@ -220,7 +224,7 @@ function q21() {
 			state[1].textContent = 'q1';
 			break;
 		case ' ':
-			table[index].textContent = 1;
+			table[index].textContent = '1';
 			tr.insertAdjacentHTML('beforeend', `<td> </td>`);
 			table = tr.querySelectorAll('td');
 			index -= 1;
@@ -299,3 +303,131 @@ function q24() {
 }
 
 // binary Addition
+function q30() {
+	state[0].textContent = 'q0';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case '+':
+		case '1':
+		case '0':
+			index += 1;
+			setTimeout(q30, 500);
+			state[1].textContent = 'q0';
+			break;
+		case ' ':
+			index -= 1;
+			setTimeout(q31, 500);
+			state[1].textContent = 'q1';
+			break;
+	}
+}
+function q31() {
+	state[0].textContent = 'q1';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case ' ':
+			index -= 1;
+			setTimeout(q31, 500);
+			state[1].textContent = 'q1';
+			break;
+		case '+':
+			table[index].textContent = ' ';
+			index += 1;
+			setTimeout(q34, 500);
+			state[1].textContent = 'q4';
+			break;
+		case '1':
+			table[index].textContent = '0';
+			index -= 1;
+			setTimeout(q32, 500);
+			state[1].textContent = 'q2';
+			break;
+		case '0':
+			table[index].textContent = 1;
+			index -= 1;
+			setTimeout(q31, 500);
+			state[1].textContent = 'q1';
+			break;
+	}
+}
+function q32() {
+	state[0].textContent = 'q2';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case ' ':
+		case '1':
+		case '0':
+			index -= 1;
+			setTimeout(q32, 500);
+			state[1].textContent = 'q2';
+			break;
+		case '+':
+			index -= 1;
+			setTimeout(q33, 500);
+			state[1].textContent = 'q3';
+			break;
+	}
+}
+function q33() {
+	state[0].textContent = 'q3';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case ' ':
+			table[index].after(newChild)
+			table = tr.querySelectorAll('td');
+			table[++index].textContent = '1';
+			table[--index].classList.remove('active');
+			table[++index].classList.add('active');
+			setTimeout(q30, 500);
+			state[1].textContent = 'q0';
+			break; 
+		case '0':
+			table[index].textContent = '1';
+			index += 1;
+			setTimeout(q30, 500);
+			state[1].textContent = 'q0';
+			break; 
+		case '1':
+			table[index].textContent = '0';
+			index -= 1;
+			setTimeout(q33, 500);
+			state[1].textContent = 'q3';
+			break; 
+	}
+}
+function q34() {
+	state[0].textContent = 'q4';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case '1':
+			table[index].textContent = ' ';
+			index += 1;
+			setTimeout(q34, 500);
+			state[1].textContent = 'q4';
+			break; 
+		case ' ':
+			state[1].textContent = '';
+			setTimeout( () => {
+				table.forEach(td => {
+					if(td.textContent == ' ') td.remove();
+				});
+			state[0].textContent = '';
+			btn.removeEventListener('click', clear);
+			btn.textContent = 'вычислить';
+			btn.insertAdjacentHTML('beforebegin', `<input type="text" placeholder="Введите уравнение"></input>`);
+			btn.addEventListener('click', main); 
+
+			}, 1500);
+			break;
+	}
+}
