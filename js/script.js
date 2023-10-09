@@ -8,6 +8,20 @@ let text, preIndex, index;
 
 btn.addEventListener('click', main); 
 
+function processString(inputString) {
+    for (const char of inputString) {
+        switch (char) {
+            case '+':
+							return inputString.indexOf('0') == -1 ? 'q10' : 'q30';
+            case '*':
+                return 'q20';
+            default:
+                break;
+        }
+    }
+		return 'Error';
+}
+
 function main() {
 	text = ''; 
 	preIndex = 0;
@@ -28,18 +42,30 @@ function main() {
 
 	table = tr.querySelectorAll('td');
 	table[index].classList.add('active');
-	setTimeout(q0, 700);
 	btn.removeEventListener('click', main);
 	btn.textContent = 'стереть';
 	input.remove();
 	btn.addEventListener('click', clear)
+	switch(processString(text)){
+		case 'q10':
+			setTimeout(q10, 700);
+			break;
+		case 'q20':
+			setTimeout(q20, 700);
+			break;
+		case 'q30':
+			break;
+		default:
+			break;
+	}
 };
 
 function clear(){
 	location.reload ();
 }
 
-function q0() {
+// unary Addition
+function q10() {
 	state[0].textContent = 'q0';
 	table[preIndex].classList.remove('active');
 	table[index].classList.add('active');
@@ -48,25 +74,24 @@ function q0() {
 		case '+':
 		case ' ':
 			index += 1;
-			setTimeout(q0, 700);
+			setTimeout(q10, 700);
 			state[1].textContent = 'q0';
 			break;
 		case '1':
 			table[index].textContent = ' ';
 			index += 1;
-			setTimeout(q1, 700);
+			setTimeout(q11, 700);
 			state[1].textContent = 'q1';
 			break;
 		case '=':
 			table[index].textContent = ' ';
 			index -= 1;
-			setTimeout(q3, 700);
+			setTimeout(q13, 700);
 			state[1].textContent = 'q3';
 			break;
 	}
 }
-
-function q1() {
+function q11() {
 	state[0].textContent = 'q1';
 	table[preIndex].classList.remove('active');
 	table[index].classList.add('active');
@@ -76,7 +101,7 @@ function q1() {
 		case '=':
 		case '1':
 			index += 1;
-			setTimeout(q1, 700);
+			setTimeout(q11, 700);
 			state[1].textContent = 'q1';
 			break;
 		case ' ':
@@ -84,13 +109,12 @@ function q1() {
 			tr.insertAdjacentHTML('beforeend', `<td> </td>`);
 			table = tr.querySelectorAll('td');
 			index -= 1;
-			setTimeout(q2, 700);
+			setTimeout(q12, 700);
 			state[1].textContent = 'q2';
 			break;
 	}
 }
-
-function q2() {
+function q12() {
 	state[0].textContent = 'q2';
 	table[preIndex].classList.remove('active');
 	table[index].classList.add('active');
@@ -99,23 +123,22 @@ function q2() {
 		case '+':
 		case '=':
 			index -= 1;
-			setTimeout(q2, 700);
+			setTimeout(q12, 700);
 			state[1].textContent = 'q2';
 			break;
 		case '1':
 			index -= 1;
-			setTimeout(q2, 700);
+			setTimeout(q12, 700);
 			state[1].textContent = 'q2';
 			break;
 		case ' ':
 			index += 1;
-			setTimeout(q0, 700);
+			setTimeout(q10, 700);
 			state[1].textContent = 'q0';
 			break;
 	}
 }
-
-function q3() {
+function q13() {
 	state[0].textContent = 'q3';
 	table[preIndex].classList.remove('active');
 	table[index].classList.add('active');
@@ -141,8 +164,138 @@ function q3() {
 		case ' ':
 			table[index].textContent = ' ';
 			index -= 1;
-			setTimeout(q3, 700);
+			setTimeout(q13, 700);
 			state[1].textContent = 'q3';
 			break;
 	}
 }
+
+// unary Multiplication
+function q20() {
+	state[0].textContent = 'q0';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case '*':
+			table[index].textContent = ' ';
+			index += 1;
+			setTimeout(q24, 500);
+			state[1].textContent = 'q4';
+			break;
+		case ' ':
+			index += 1;
+			setTimeout(q20, 500);
+			state[1].textContent = 'q0';
+			break;
+		case '1':
+			table[index].textContent = ' ';
+			index += 1;
+			setTimeout(q21, 500);
+			state[1].textContent = 'q1';
+			break;
+		case '=':
+			table[index].textContent = '=';
+			index -= 1;
+			setTimeout(q23, 500);
+			state[1].textContent = 'q3';
+			break;
+	}
+}
+function q21() {
+	state[0].textContent = 'q1';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case '*':
+			index += 1;
+			setTimeout(q20, 500);
+			state[1].textContent = 'q0';
+			break;
+		case '=':
+		case '1':
+			index += 1;
+			setTimeout(q21, 500);
+			state[1].textContent = 'q1';
+			break;
+		case ' ':
+			table[index].textContent = 1;
+			tr.insertAdjacentHTML('beforeend', `<td> </td>`);
+			table = tr.querySelectorAll('td');
+			index -= 1;
+			setTimeout(q22, 500);
+			state[1].textContent = 'q2';
+			break;
+	}
+}
+function q22() {
+	state[0].textContent = 'q2';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case '1':
+		case '=':
+			index -= 1;
+			setTimeout(q22, 500);
+			state[1].textContent = 'q2';
+			break;
+		case ' ':
+			index += 1;
+			setTimeout(q20, 500);
+			state[1].textContent = 'q0';
+			break;
+	}
+}
+function q23() {
+	state[0].textContent = 'q3';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case ' ':
+			table[index].textContent = '1';
+			index -= 1;
+			setTimeout(q23, 500);
+			state[1].textContent = 'q3';
+			break; 
+		case '*':
+			index -= 1;
+			setTimeout(q22, 500);
+			state[1].textContent = 'q2';
+			break; 
+	}
+}
+function q24() {
+	state[0].textContent = 'q4';
+	table[preIndex].classList.remove('active');
+	table[index].classList.add('active');
+	preIndex = index;
+	switch (table[index].textContent){
+		case '1':
+		case ' ':
+			table[index].textContent = ' ';
+			index += 1;
+			setTimeout(q24, 500);
+			state[1].textContent = 'q4';
+			break;
+		case '=':
+			table[index].textContent = ' ';
+			state[1].textContent = '';
+			setTimeout( () => {
+				table.forEach(td => {
+					if(td.textContent == ' ') td.remove();
+				});
+			state[0].textContent = '';
+			btn.removeEventListener('click', clear);
+			btn.textContent = 'вычислить';
+			btn.insertAdjacentHTML('beforebegin', `<input type="text" placeholder="Введите уравнение"></input>`);
+			btn.addEventListener('click', main); 
+
+			}, 1500);
+			break;
+	}
+}
+
+// binary Addition
