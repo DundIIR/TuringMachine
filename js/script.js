@@ -5,7 +5,6 @@ const btn = document.querySelector('button'),
 let table;
 
 let text, preIndex, index;
-let newChild = document.createElement('td');
 
 btn.addEventListener('click', main); 
 
@@ -381,6 +380,7 @@ function q33() {
 	preIndex = index;
 	switch (table[index].textContent){
 		case ' ':
+			let newChild = document.createElement('td');
 			table[index].after(newChild)
 			table = tr.querySelectorAll('td');
 			table[++index].textContent = '1';
